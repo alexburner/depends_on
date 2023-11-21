@@ -7,6 +7,8 @@ COPY requirements.txt /code
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip3 install -r requirements.txt
 
+RUN apk --no-cache add curl
+
 COPY . /code
 
 ENTRYPOINT ["python3"]

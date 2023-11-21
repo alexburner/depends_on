@@ -1,0 +1,24 @@
+services:
+  microservice:
+    build:
+      context: .
+      target: builder
+    stop_signal: SIGINT
+    environment:
+      - PORT=8001
+    ports:
+      - '8001:8001'
+    volumes:
+      - .:/code
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: curl -f http://localhost:8001/health/microservice
+      interval: 2s
+      retries: 10
+
+  web:
+    depends_on:
+      microservice:
+        condition: service_healthy
